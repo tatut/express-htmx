@@ -11,34 +11,35 @@ app.set('view engine', 'pug')
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 
-function render(res, filter) {
+function render(req, res, filter) {
     const ts = filter == "all"
           ? state.todos
           : ((filter == "active")
              ? state.todos.filter( t => t.complete == false )
              : state.todos.filter( t => t.complete == true ))
-    res.render("index", {todos: ts, filter: filter})
+    const tpl = req.headers['hx-request'] == 'true' ? "todos" : "index"
+    res.render(tpl, {todos: ts, filter: filter})
 }
 
-app.get("/", (_, res) => render(res,"all"))
-app.get("/active", (_,res) => render(res,"active"))
-app.get("/completed", (_,res) => render(res,"completed"))
+app.get("/", (req, res) => render(req, res,"all"))
+app.get("/active", (req,res) => render(req, res,"active"))
+app.get("/completed", (req,res) => render(req, res,"completed"))
 app.post("/new-todo", (req,res) => {
-
-    todos.push({label: req.body["new-todo"], complete: false})
-    render(res,req.body["filter"])
+    state.todos.push({id: state.id++, label: req.body["new-todo"], complete: false})
+    render(req, res, req.body["filter"])
 })
 app.post("/clear-completed",(req,res) => {
     state.todos = state.todos.filter(t => t.complete == false)
-    render(res,req.body["filter"])
+    render(req, res,req.body["filter"])
 })
 app.post("/toggle", (req,res) => {
     let id = parseInt(req.body["id"])
+    console.log("state.todos: ", state.todos, ", id: ", id)
     state.todos.forEach(t => {
         if(t.id == id)
             t.complete = !t.complete
     })
-    render(res,req.body["filter"])
+    render(req,res,req.body["filter"])
 })
 
 app.listen(port, () => {

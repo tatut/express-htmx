@@ -5,34 +5,8 @@ html
     script(src="https://unpkg.com/htmx.org@1.9.4")
     meta(charset="utf-8")
     meta(name="viewport",content="width=device-width, initial-scale=1")
-  body(hx-vals={filter: filter},hx-target="body")
-    section(class="todoapp")
-      header(class="header")
-        h1 todos
-        input(hx-post="/new-todo",name="new-todo",class="new-todo",placeholder="What needs to be done?",autofocus)
-      section(class="main")
-        input(id="toggle-all",class="toggle-all",type="checkbox")
-        label(for="toggle-all") Mark all as complete
-        ul(class="todo-list")
-          each t in todos
-            li
-              div(class="view")
-                input(hx-post="/toggle",hx-vals={id:t.id},class="toggle",type="checkbox",checked=t.complete)
-                label= t.label
-                button(class="destroy")
-              input(class="edit",value=t.label)
-      footer(class="footer")
-        span(class="todo-count")
-          - var left = todos.filter(t=>t.complete==false).length
-          strong= left + (left == 1 ? " item " : " items ") + "left"
-        ul(class="filters",hx-boost="true")
-          li
-            a(href="/") All
-          li
-            a(href="/active") Active
-          li
-            a(href="/completed") Completed
-        button(hx-post="/clear-completed",hx-target="body",class="clear-completed") Clear completed
+  body(hx-target=".todoapp")
+    include todos.pug
     footer(class="info")
       p Double-click to edit a todo
       p Template by
