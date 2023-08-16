@@ -3,9 +3,10 @@ html
     title= title
     link(rel="stylesheet",href="/todomvc.css")
     script(src="https://unpkg.com/htmx.org@1.9.4")
+    script(src="https://unpkg.com/htmx.org/dist/ext/ws.js")
     meta(charset="utf-8")
     meta(name="viewport",content="width=device-width, initial-scale=1")
-  body(hx-target=".todoapp")
+  body(hx-target=".todoapp",hx-ext="ws",ws-connect="/ws")
     include todos.pug
     footer(class="info")
       p Double-click to edit a todo
