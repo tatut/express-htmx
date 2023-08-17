@@ -5,11 +5,11 @@ html
     script(src="https://unpkg.com/htmx.org@1.9.4")
     meta(charset="utf-8")
     meta(name="viewport",content="width=device-width, initial-scale=1")
-  body(hx-vals={filter: filter},hx-target="body")
+  body(hx-target="body")
     section(class="todoapp")
       header(class="header")
         h1 todos
-        input(hx-post="/new-todo",name="new-todo",class="new-todo",placeholder="What needs to be done?",autofocus)
+        input(hx-post="/new-todo",hx-vals={filter: filter},name="new-todo",class="new-todo",placeholder="What needs to be done?",autofocus)
       section(class="main")
         input(id="toggle-all",class="toggle-all",type="checkbox")
         label(for="toggle-all") Mark all as complete
@@ -17,7 +17,7 @@ html
           each t in todos
             li
               div(class="view")
-                input(hx-post="/toggle",hx-vals={id:t.id},class="toggle",type="checkbox",checked=t.complete)
+                input(hx-post="/toggle",hx-vals={filter: filter, id:t.id},class="toggle",type="checkbox",checked=t.complete)
                 label= t.label
                 button(class="destroy")
               input(class="edit",value=t.label)

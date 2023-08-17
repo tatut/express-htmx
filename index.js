@@ -24,8 +24,7 @@ app.get("/", (_, res) => render(res,"all"))
 app.get("/active", (_,res) => render(res,"active"))
 app.get("/completed", (_,res) => render(res,"completed"))
 app.post("/new-todo", (req,res) => {
-
-    todos.push({label: req.body["new-todo"], complete: false})
+    state.todos.push({id: state.id++, label: req.body["new-todo"], complete: false})
     render(res,req.body["filter"])
 })
 app.post("/clear-completed",(req,res) => {
